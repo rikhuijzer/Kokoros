@@ -33,6 +33,9 @@ COPY --from=builderpy /kokoro-v0_19.onnx ./checkpoints/kokoro-v0_19.onnx
 
 RUN chmod +x ./target/release/koko && apt-get update -qq && apt-get install -qq -y pkg-config libssl-dev 
 
+COPY ./shutdown_monitor.sh .
+RUN chmod +x ./shutdown_monitor.sh
+
 EXPOSE 3000
 
-ENTRYPOINT [ "./target/release/koko" ] 
+ENTRYPOINT ["/app/shutdown_monitor.sh"]
