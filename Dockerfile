@@ -11,7 +11,7 @@ RUN pip install requests torch numpy && python fetch_voices.py
 
 FROM rust:1.84.0-slim-bookworm AS builderrs
 
-RUN apt-get update -qq && apt-get install -qq -y pkg-config libssl-dev clang git cmake netcat-traditional procps && rustup component add rustfmt
+RUN apt-get update -qq && apt-get install -qq -y pkg-config libssl-dev clang git cmake && rustup component add rustfmt
 
 WORKDIR /app
 
@@ -31,7 +31,7 @@ COPY --from=builderrs /app/target/release/koko ./target/release/koko
 COPY --from=builderpy /data ./data
 COPY --from=builderpy /kokoro-v0_19.onnx ./checkpoints/kokoro-v0_19.onnx
 
-RUN chmod +x ./target/release/koko && apt-get update -qq && apt-get install -qq -y pkg-config libssl-dev 
+RUN chmod +x ./target/release/koko && apt-get update -qq && apt-get install -qq -y pkg-config libssl-dev netcat-traditional procps
 
 COPY ./shutdown_monitor.sh .
 RUN chmod +x ./shutdown_monitor.sh
